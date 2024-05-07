@@ -2,13 +2,14 @@ import { useEffect, useState } from 'react'
 import { Classes, Tab, Tabs } from '@blueprintjs/core'
 
 import { useMediaQuery } from 'hooks'
-import { Register, SignIn } from 'panels'
+import { Register, SignIn, SignInAutofill } from 'panels'
 
 import './App.css'
 
 enum TabIds {
   Register = 'r',
   SignIn = 'si',
+  AutoFill = 'af',
 }
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
       <Tabs selectedTabId={selectedTabId} onChange={next => setSelectedTabId(next as TabIds)} renderActiveTabPanelOnly>
         <Tab id={TabIds.Register} title="Register" panel={<Register />} />
         <Tab id={TabIds.SignIn} title="Sign In" panel={<SignIn />} />
+        <Tab id={TabIds.AutoFill} title="Sign In (Autofill)" panel={<SignInAutofill />} />
       </Tabs>
     </>
   )
