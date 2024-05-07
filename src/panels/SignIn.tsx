@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react'
 import { Button, Callout, Code, FormGroup, InputGroup } from '@blueprintjs/core'
-
 import { SDK, AuthResponse } from '@snapauth/sdk'
 
 import { SourceUrl } from 'components'
