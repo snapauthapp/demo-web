@@ -1,18 +1,23 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { Button, FormGroup, InputGroup } from '@blueprintjs/core'
+
+import { SDK, AuthResponse } from '@snapauth/sdk'
+
+const snapAuth = new SDK(import.meta.env.VITE_SNAPAUTH_PUBLISHABLE_KEY)
 
 const SignIn: React.FC = () => {
   const username = useRef<HTMLInputElement>(null)
-  const password = useRef<HTMLInputElement>(null)
 
-  const onSubmit = (e: React.FormEvent) => {
+  const [authResponse, setAuthResponse] = useState<AuthResponse>()
+
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    alert(JSON.stringify({
-      username: username.current!.value,
-    }))
+
+    const auth = await snapAuth.startAuth({ id: username.current!.value })
+    setAuthResponse(auth)
   }
 
-  return (
+  return <>
     <form onSubmit={onSubmit}>
       <FormGroup label="Your username" labelInfo="(required)">
         <InputGroup
@@ -21,17 +26,12 @@ const SignIn: React.FC = () => {
           required
         />
       </FormGroup>
-      <FormGroup label="Your password" labelInfo="(required)">
-        <InputGroup
-          autoComplete="current-password"
-          inputRef={password}
-          required
-          type="password"
-        />
-      </FormGroup>
       <Button type="submit" intent="primary">Sign In</Button>
     </form>
-  )
+    {authResponse &&
+    <output><pre>{JSON.stringify(authResponse, undefined, 2)}</pre></output>
+    }
+    </>
 }
 
 export default SignIn
