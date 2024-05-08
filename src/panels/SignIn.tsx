@@ -24,9 +24,9 @@ const SignIn: React.FC = () => {
     setAuthResponse(auth)
 
     if (auth.ok) {
+      toast.success('Got a SnapAuth token')
       const data = await backend.signIn(auth.data.token)
       setBackendData(data)
-      toast.success('Signed in')
     } else {
       toast.error(auth.error)
     }
@@ -35,7 +35,7 @@ const SignIn: React.FC = () => {
   return <>
     <Callout>
       <p>If you want a passkey-first auth flow or have a multi-step process, <Code>snapAuth.startAuth()</Code> is the way to go.
-      If not many of your users have passkeys yet, this alone can be a little jarring.</p>
+        If not many of your users have passkeys yet, this alone can be a little jarring.</p>
       <p>This is <em>great</em> way to re-authenticate a returning user, since you should already have their <Code>user id</Code> in a cookie or session.</p>
       <p><SourceUrl path="src/panels/SignIn.tsx" /></p>
     </Callout>
@@ -50,7 +50,7 @@ const SignIn: React.FC = () => {
       <Button type="submit" intent="primary">Sign In</Button>
     </form>
     <ApiData backendData={backendData} clientResponse={authResponse} />
-    </>
+  </>
 }
 
 export default SignIn

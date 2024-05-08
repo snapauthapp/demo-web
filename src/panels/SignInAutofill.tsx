@@ -2,7 +2,10 @@ import { useEffect, useRef, useState } from 'react'
 import { Button, Callout, Code, FormGroup, InputGroup } from '@blueprintjs/core'
 import { SDK, AuthResponse } from '@snapauth/sdk'
 
-import { SourceUrl } from 'components'
+import { ApiData, SourceUrl } from 'components'
+import { backend, toast } from 'helpers'
+
+import type { ApiInfo } from 'helpers/backend'
 
 const snapAuth = new SDK(import.meta.env.VITE_SNAPAUTH_PUBLISHABLE_KEY)
 
@@ -11,16 +14,25 @@ const SignInAutofill: React.FC = () => {
   const password = useRef<HTMLInputElement>(null)
 
   const [authResponse, setAuthResponse] = useState<AuthResponse>()
+  const [backendData, setBackendData] = useState<ApiInfo>()
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     setAuthResponse(undefined)
-    alert('Traditional username/password fallback')
+    setBackendData(undefined)
+    toast.success('Using username/password auth')
   }
 
   useEffect(() => {
-    snapAuth.handleAutofill((response: AuthResponse) => {
+    snapAuth.handleAutofill(async (response: AuthResponse) => {
       setAuthResponse(response)
+      if (response.ok) {
+        toast.success('Got the autofilled SnapAuth token')
+        const data = await backend.signIn(response.data.token)
+        setBackendData(data)
+      } else {
+        toast.error(response.error)
+      }
     })
   }, [])
 
@@ -50,9 +62,7 @@ const SignInAutofill: React.FC = () => {
       </FormGroup>
       <Button type="submit" intent="primary">Sign In</Button>
     </form>
-    {authResponse &&
-    <output><pre>{JSON.stringify(authResponse, undefined, 2)}</pre></output>
-    }
+    <ApiData backendData={backendData} clientResponse={authResponse} />
   </>
 }
 
