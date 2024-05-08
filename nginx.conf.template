@@ -1,0 +1,26 @@
+# Nginx config template. See Dockerfile.
+server {
+    listen $PORT;
+
+    root /var/www/html;
+    index index.html;
+
+    location /robots.txt {
+        add_header Cache-Control 'no-store';
+        add_header Cache-Control 'no-cache';
+        expires 0;
+    }
+
+    location /assets {
+        add_header Cache-Control 'public';
+        expires 1m;
+    }
+
+    location / {
+        # Throw everything that doesn't match a static asset to index.html.
+        # That will run client-side routing.
+        try_files $uri /index.html;
+    }
+}
+
+# vim: ft=nginx
