@@ -2,7 +2,10 @@ import { useRef, useState } from 'react'
 import { Button, Callout, Code, FormGroup, InputGroup } from '@blueprintjs/core'
 import { SDK, AuthResponse } from '@snapauth/sdk'
 
-import { SourceUrl } from 'components'
+import { ApiData, SourceUrl } from 'components'
+import { backend, toast } from 'helpers'
+
+import type { ApiInfo } from 'helpers/backend'
 
 const snapAuth = new SDK(import.meta.env.VITE_SNAPAUTH_PUBLISHABLE_KEY)
 
@@ -10,12 +13,23 @@ const SignIn: React.FC = () => {
   const username = useRef<HTMLInputElement>(null)
 
   const [authResponse, setAuthResponse] = useState<AuthResponse>()
+  const [backendData, setBackendData] = useState<ApiInfo>()
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setAuthResponse(undefined)
+    setBackendData(undefined)
 
     const auth = await snapAuth.startAuth({ id: username.current!.value })
     setAuthResponse(auth)
+
+    if (auth.ok) {
+      const data = await backend.signIn(auth.data.token)
+      setBackendData(data)
+      toast.success('Signed in')
+    } else {
+      toast.error(auth.error)
+    }
   }
 
   return <>
@@ -35,9 +49,7 @@ const SignIn: React.FC = () => {
       </FormGroup>
       <Button type="submit" intent="primary">Sign In</Button>
     </form>
-    {authResponse &&
-    <output><pre>{JSON.stringify(authResponse, undefined, 2)}</pre></output>
-    }
+    <ApiData backendData={backendData} clientResponse={authResponse} />
     </>
 }
 
