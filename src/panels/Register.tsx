@@ -1,8 +1,11 @@
 import { useRef, useState } from 'react'
-import { Button, Callout, Code, FormGroup, InputGroup } from '@blueprintjs/core'
+import { Button, Callout, Code, FormGroup, InputGroup, Section, SectionCard } from '@blueprintjs/core'
 import { SDK, RegisterResponse } from '@snapauth/sdk'
 
 import { SourceUrl } from 'components'
+import { backend, toast } from 'helpers'
+
+import type { ApiInfo } from 'helpers/backend'
 
 const snapAuth = new SDK(import.meta.env.VITE_SNAPAUTH_PUBLISHABLE_KEY)
 
@@ -10,12 +13,26 @@ const Register: React.FC = () => {
   const username = useRef<HTMLInputElement>(null)
 
   const [registerResponse, setRegisterResponse] = useState<RegisterResponse>()
+  const [backendData, setBackendData] = useState<ApiInfo>()
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    const registration = await snapAuth.startRegister({ name: username.current!.value })
+    const name = username.current!.value
+
+    const registration = await snapAuth.startRegister({ name })
+    // This is for display only. Normally, you just use the data.
     setRegisterResponse(registration)
+
+    if (registration.ok) {
+      toast.success('Got a SnapAuth token')
+
+      const data = await backend.attachRegistration(registration.data.token, name)
+      // Again, for display purposes only.
+      setBackendData(data)
+    } else {
+      toast.error('Error response: ' + registration.error)
+    }
   }
 
   return <>
@@ -45,9 +62,22 @@ const Register: React.FC = () => {
       </FormGroup>
       <Button type="submit" intent="primary">Register</Button>
     </form>
-    {registerResponse &&
-    <output><pre>{JSON.stringify(registerResponse, undefined, 2)}</pre></output>
-    }
+    {registerResponse && <Section title="Client SDK Response">
+      <output>
+        <pre>{JSON.stringify(registerResponse, undefined, 2)}</pre>
+      </output>
+    </Section>}
+    {backendData && <Section title="Backend">
+      <SectionCard>
+        <p><Code>POST /registration/attach</Code></p>
+        <output><pre>{JSON.stringify(backendData.requestBody, undefined, 2)}</pre></output>
+      </SectionCard>
+
+      <SectionCard>
+        <p>Response</p>
+        <output><pre>{JSON.stringify(backendData.responseBody, undefined, 2)}</pre></output>
+      </SectionCard>
+    </Section>}
   </>
 }
 
