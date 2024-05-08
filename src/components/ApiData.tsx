@@ -1,4 +1,4 @@
-import { Code, Section, SectionCard } from '@blueprintjs/core'
+import { Section, SectionCard } from '@blueprintjs/core'
 import { AuthResponse, RegisterResponse } from '@snapauth/sdk'
 
 import type { ApiInfo } from 'helpers/backend'
@@ -17,7 +17,7 @@ const ApiData: React.FC<Props> = ({ backendData, clientResponse }) => {
     </Section>}
     {backendData && <Section title="Backend">
       <SectionCard>
-        <p><Code>POST /registration/attach</Code></p>
+        <p>Request</p>
         <output><pre>{JSON.stringify(backendData.requestBody, undefined, 2)}</pre></output>
       </SectionCard>
 
