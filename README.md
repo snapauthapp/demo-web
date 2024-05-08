@@ -18,3 +18,5 @@ In a real app, the components would talk to your own backend, which then uses on
 > This demo does not have a backend so you can see all of the network calls involved, including server APIs.
 
 It uses React with TypeScript and Vite - but you can use SnapAuth with any web technologies!
+
+License: BSD-3-Clause
