@@ -17,6 +17,8 @@ const Register: React.FC = () => {
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setBackendData(undefined)
+    setRegisterResponse(undefined)
 
     const name = username.current!.value
 
