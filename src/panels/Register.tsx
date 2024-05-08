@@ -29,7 +29,7 @@ const Register: React.FC = () => {
     if (registration.ok) {
       toast.success('Got a SnapAuth token')
 
-      const data = await backend.attachRegistration(registration.data.token, name)
+      const data = await backend.register(registration.data.token, name)
       // Again, for display purposes only.
       setBackendData(data)
     } else {

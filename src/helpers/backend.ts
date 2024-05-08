@@ -1,16 +1,15 @@
-
-
-// This is copy-pasted from the Node SDK, and slightly tweaked to run
-// in-browser.
-
-// Do NOT do this in a real application!
-
-// Normally, you would send the client token to YOUR backend, and use one of
-// our server SDKs to attach or verify it.
-//
-// Since this demo doesn't have a backend, it's directly returning what the
-// SnapAuth API returned so it can be displayed.
-
+/**
+ * DO NOT MAKE SNAPAUTH SERVER CALLS FROM THE CLIENT IN A REAL APPLICATION!
+ *
+ * This will leak your API secret, which can easily lead to widespread account
+ * takeovers.
+ *
+ * Instead, you would send the client token to YOUR backend, and use one of
+ * our server SDKs to attach or verify it.
+ *
+ * Since this demo doesn't have a backend, it's directly returning what the
+ * SnapAuth API returned so it can be displayed.
+ */
 class FakeBackendApi {
 
   private authHeader: string
@@ -25,8 +24,8 @@ class FakeBackendApi {
   // and no handle. Normally, the `id` would be a generated value (primary
   // key, etc) and the `handle` would be a username, email address, or
   // similar user-provided identifier.
-  attachRegistration = async (token: string, userId: string): Promise<ApiInfo> => {
-    return await this.post('/registration/attach', { token, user: { id: userId } })
+  register = async (token: string, username: string): Promise<ApiInfo> => {
+    return await this.post('/registration/attach', { token, user: { id: username } })
   }
 
   signIn = async (token: string): Promise<ApiInfo> => {
