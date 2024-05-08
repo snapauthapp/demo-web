@@ -1,8 +1,8 @@
 import { useRef, useState } from 'react'
-import { Button, Callout, Code, FormGroup, InputGroup, Section, SectionCard } from '@blueprintjs/core'
+import { Button, Callout, Code, FormGroup, InputGroup } from '@blueprintjs/core'
 import { SDK, RegisterResponse } from '@snapauth/sdk'
 
-import { SourceUrl } from 'components'
+import { ApiData, SourceUrl } from 'components'
 import { backend, toast } from 'helpers'
 
 import type { ApiInfo } from 'helpers/backend'
@@ -62,22 +62,7 @@ const Register: React.FC = () => {
       </FormGroup>
       <Button type="submit" intent="primary">Register</Button>
     </form>
-    {registerResponse && <Section title="Client SDK Response">
-      <output>
-        <pre>{JSON.stringify(registerResponse, undefined, 2)}</pre>
-      </output>
-    </Section>}
-    {backendData && <Section title="Backend">
-      <SectionCard>
-        <p><Code>POST /registration/attach</Code></p>
-        <output><pre>{JSON.stringify(backendData.requestBody, undefined, 2)}</pre></output>
-      </SectionCard>
-
-      <SectionCard>
-        <p>Response</p>
-        <output><pre>{JSON.stringify(backendData.responseBody, undefined, 2)}</pre></output>
-      </SectionCard>
-    </Section>}
+    <ApiData backendData={backendData} clientResponse={registerResponse} />
   </>
 }
 
