@@ -11,9 +11,11 @@ interface Props {
 const ApiData: React.FC<Props> = ({ backendData, clientResponse }) => {
   return <>
     {clientResponse && <Section title="Client SDK Response">
-      <output>
-        <pre>{JSON.stringify(clientResponse, undefined, 2)}</pre>
-      </output>
+      <SectionCard>
+        <output>
+          <pre>{JSON.stringify(clientResponse, undefined, 2)}</pre>
+        </output>
+      </SectionCard>
     </Section>}
     {backendData && <Section title="Backend">
       <SectionCard>
