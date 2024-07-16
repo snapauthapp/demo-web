@@ -2,18 +2,19 @@ import { useEffect, useState } from 'react'
 import { Classes, Tab, Tabs } from '@blueprintjs/core'
 
 import { useMediaQuery } from 'hooks'
-import { Register, SignIn, SignInAutofill } from 'panels'
+import { AutomaticCreate, Register, SignIn, SignInAutofill } from 'panels'
 
 import './App.css'
 
 enum TabIds {
   Register = 'r',
+  AutomaticCreate = 'ac',
   SignIn = 'si',
   AutoFill = 'af',
 }
 
 function App() {
-  const [selectedTabId, setSelectedTabId] = useState(TabIds.Register)
+  const [selectedTabId, setSelectedTabId] = useState(TabIds.AutomaticCreate)
   const darkMode = useMediaQuery('(prefers-color-scheme: dark)')
   useEffect(() => {
     document.querySelector('body')!.className = darkMode ? Classes.DARK : ''
@@ -32,7 +33,8 @@ function App() {
       <p>You can see the source on <a href="https://github.com/snapauthapp/demo-web" target="_blank">Github</a>.</p>
 
       <Tabs selectedTabId={selectedTabId} onChange={next => setSelectedTabId(next as TabIds)} renderActiveTabPanelOnly>
-        <Tab id={TabIds.Register} title="Register" panel={<Register />} />
+        <Tab id={TabIds.Register} title="Create a Passkey" panel={<Register />} />
+        <Tab id={TabIds.AutomaticCreate} title="Automatic Passkey Creation" panel={<AutomaticCreate />} />
         <Tab id={TabIds.SignIn} title="Sign In" panel={<SignIn />} />
         <Tab id={TabIds.AutoFill} title="Sign In (Autofill)" panel={<SignInAutofill />} />
       </Tabs>

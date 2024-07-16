@@ -1,13 +1,11 @@
 import { useRef, useState } from 'react'
 import { Button, Callout, Code, FormGroup, InputGroup } from '@blueprintjs/core'
-import { SDK, RegisterResponse } from '@snapauth/sdk'
+import { RegisterResponse } from '@snapauth/sdk'
 
 import { ApiData, SourceUrl } from 'components'
-import { backend, toast } from 'helpers'
+import { backend, snapAuth, toast } from 'helpers'
 
 import type { ApiInfo } from 'helpers/backend'
-
-const snapAuth = new SDK(import.meta.env.VITE_SNAPAUTH_PUBLISHABLE_KEY)
 
 const Register: React.FC = () => {
   const username = useRef<HTMLInputElement>(null)

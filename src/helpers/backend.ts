@@ -15,9 +15,9 @@ class FakeBackendApi {
   private authHeader: string
   private host: URL
 
-  constructor(secretKey: string) {
+  constructor(secretKey: string, host: string = 'https://api.snapauth.app') {
     this.authHeader = 'Basic ' + btoa(':' + secretKey)
-    this.host = new URL('https://api.snapauth.app')
+    this.host = new URL(host)
   }
 
   // As a fake backend, this uses the user-provided value for the username
@@ -65,5 +65,8 @@ export interface ApiInfo {
   responseBody: unknown
 }
 
-const backend = new FakeBackendApi(import.meta.env.VITE_SNAPAUTH_SECRET_KEY_NEVER_PUBLISH_THIS_IN_A_REAL_APP)
+const backend = new FakeBackendApi(
+  import.meta.env.VITE_SNAPAUTH_SECRET_KEY_NEVER_PUBLISH_THIS_IN_A_REAL_APP,
+  import.meta.env.VITE_SNAPAUTH_HOST,
+)
 export default backend
